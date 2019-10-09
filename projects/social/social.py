@@ -71,7 +71,9 @@ class SocialGraph:
                 possibleFriendships.append((userID, friendID))
         
         friendshipsToCreate = random.sample(possibleFriendships, (numUsers * avgFriendships // 2))
-       
+        #numFriendshipsToCreate = (numUsers * avgFriendships // 2)
+        #random.shuffle(possibleFriendships)
+        #friendshipsToCreate = possibleFriendships[:numFriendshipsToCreate]
         for friendship in friendshipsToCreate:
             self.addFriendship(friendship[0], friendship[1])
 
@@ -84,7 +86,23 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
-       
+        visited = {}  # Note that this is a dictionary, not a set
+        # !!!! IMPLEMENT ME
+        q = Queue()
+        visited = {}
+        q.enqueue([userID])
+        while q.size() > 0:
+            path = q.dequeue()
+            v = path[-1]
+            if v not in visited:
+                visited[v] = path
+                for neighbor in self.friendships[v]:
+                    path_copy = list(path)
+                    path_copy.append(neighbor)
+                    q.enqueue(path_copy)
+
+        return visited 
+
 
 if __name__ == '__main__':
     sg = SocialGraph()
